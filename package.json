@@ -1,8 +1,0 @@
-{
-  "private": true,
-  "workspaces": [
-    "receipts-reader-app",
-    "receipts-server",
-    "receipts-shared"
-  ]
-}
