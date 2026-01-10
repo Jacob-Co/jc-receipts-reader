@@ -1,41 +1,22 @@
-import {customReceiptPostUrl} from "../backend-constants";
 import CustomReceiptForm from "./custom-receipt-form";
 
-export type CustomReceipt = {
-    date: number | null,
-    total: number | null,
-    tag: string | null,
-    category: string | null
-}
-
 export default function CustomReceiptsContainer() {
-    const uploadCustomReceipt = async (receipt: CustomReceipt) => {
-        if (
-            receipt.date === null || 
-            receipt.total === null || 
-            receipt.tag === null || 
-            receipt.category === null
-            ) 
-        {
-            return;
-        }
+    const categories = [
+        "Shopping",
+        "Food",
+        "Transportation",
+        "Activity",
+        "Utilities"
+    ];
 
-        await fetch(customReceiptPostUrl, {
-            method: "POST",
-            body: JSON.stringify({
-                imageId: null,
-                date: receipt.date,
-                total: receipt.total,
-                tag: receipt.tag,
-                category: receipt.category,
-            })
-        });
-
-    };
+    const tags = ["Vietnam 2025"];
 
   return (
     <div>
-        <CustomReceiptForm />
+        <CustomReceiptForm 
+            categories={categories} 
+            tags={tags}
+        />
     </div>
   );
 }

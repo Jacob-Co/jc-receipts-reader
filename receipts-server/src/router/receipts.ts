@@ -29,4 +29,9 @@ router.post("/upload", upload.single("receipt"), (req: Request, res: Response) =
   res.json({ id: res.locals.uuid });
 });
 
+router.post("/custom", (req: Request, res: Response) => {
+    console.log(req.body);
+    res.json({status: 'saved'});
+});
+
 export default router;
