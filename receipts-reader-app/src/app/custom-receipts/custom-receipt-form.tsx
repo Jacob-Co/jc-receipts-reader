@@ -21,13 +21,13 @@ export default function UploadContainer(
     const handleTotalChange = (event: React.ChangeEvent) => {
         let numberOnly = event.target.value.replace(/[^0-9.]/g, '');
         const numberParts = numberOnly.split(".");
-        if (parts.length > 2) {
-            numberOnly = parts[0] + "." + parts[1];
+        if (numberParts.length > 2) {
+            numberOnly = numberParts[0] + "." + numberParts[1];
         }
         if (numberOnly[numberOnly.length - 1] === ".") {
-            return setTotal(numbersOnly);
+            return setTotal(numberOnly);
         }
-        setTotal(Number(numbersOnly).toLocaleString());
+        setTotal(Number(numberOnly).toLocaleString());
     }
     const [category, setCategory] = useState(categories[0]);
     const handleCategoryChange = (event: React.ChangeEvent) => {
@@ -43,8 +43,10 @@ export default function UploadContainer(
             imageId: null,
             date: (new Date(isoDate)).getTime(),
             total: Number(total),
-            category,
-            tag,
+            categoryId: 16,
+            tagId: 1,
+            // category,
+            // tag,
         });
         
         await fetch(customReceiptPostUrl, {

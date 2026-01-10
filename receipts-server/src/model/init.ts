@@ -28,3 +28,14 @@ export async function initializeDefaultCategories() {
     });
 }
 
+export async function initializeTestTag() {
+    const db = getDbClient();
+    try {
+        await db.category.create({
+            data: { name: "Vietname 2025"}
+        });
+    } catch {
+        console.log("Has Test Tag");
+    }
+}
+
