@@ -1,5 +1,6 @@
 import healthRouter from "./router/health"
 import receiptsRouter from "./router/receipts"
+
 import express from "express";
 import cors from "cors";
 
