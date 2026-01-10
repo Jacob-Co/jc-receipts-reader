@@ -32,8 +32,9 @@ router.post("/upload", upload.single("receipt"), (req: Request, res: Response) =
 
 router.post("/custom", async (req: Request, res: Response) => {
     console.log(req.body);
-    const createdId = await saveReceipt(req.body);
-    res.json({id: createdId});
+    const createdReceipt = await saveReceipt(req.body);
+    createdReceipt.date = Number(createdReceipt.date);
+    res.json(createdReceipt);
 });
 
 export default router;
