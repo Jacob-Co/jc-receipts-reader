@@ -1,17 +1,25 @@
 'use client'
 import {customReceiptPostUrl} from "../backend-constants";
+import {TagDto, ReceiptDto, CategoryDto} from "../backend-types";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import {useState} from "react";
 import type React from "react";
 
-type Props = {
-    categories: string[],
-    tags: string[]
+export enum ReceiptFormType {
+    Create: "create";
+    Edit: "edit";
+    View: "view";
 }
 
-export default function UploadContainer(
-    {categories, tags} : Props    
+type Props = {
+    categories: string[],
+    tags: string[],
+    type: ReceiptFormType
+}
+
+export default function ReceiptForm(
+    {categories, tags, type} : Props    
 ) {
     const [isoDate, setIsoDate] = useState((new Date()).toISOString().slice(0,10));
     const handleIsoDateChange = (event: React.ChangeEvent) => {
