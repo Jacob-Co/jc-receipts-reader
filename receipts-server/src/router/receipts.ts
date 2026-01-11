@@ -1,4 +1,4 @@
-import { saveReceipt } from "../model/receipts";
+import { saveReceipt, getReceipt } from "../model/receipts";
 import {randomUUID} from "crypto";
 import path from "path";
 import fs from "fs";
@@ -31,10 +31,13 @@ router.post("/upload", upload.single("receipt"), (req: Request, res: Response) =
 });
 
 router.post("/custom", async (req: Request, res: Response) => {
-    console.log(req.body);
     const createdReceipt = await saveReceipt(req.body);
-    createdReceipt.date = Number(createdReceipt.date);
     res.json(createdReceipt);
+});
+
+router.get("/:id", async (req: Request, res: Response) => {
+    const receipt = await getReceipt(Number(req.params.id));
+    res.json(receipt);
 });
 
 export default router;
