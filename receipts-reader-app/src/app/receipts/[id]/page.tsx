@@ -1,5 +1,7 @@
 import { fetchReceipt, fetchAllCategories, fetchAllTags } from
 "../../backend-calls.ts";
+import ReceiptForm from "../receipt-form";
+import { ReceiptFormAction } from "../constants";
 
 export default async function ReceiptsIdPage(
     { params }: 
@@ -12,10 +14,12 @@ export default async function ReceiptsIdPage(
     
     return (
         <div>
-            {id}
-            {JSON.stringify(receipt)}
-            {JSON.stringify(categories)}
-            {JSON.stringify(tags)}
+        <ReceiptForm 
+            receipt={receipt}
+            categories={categories} 
+            tags={tags}
+            receiptFormAction={ReceiptFormAction.Edit}
+        />
         </div>
     );
 };

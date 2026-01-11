@@ -16,13 +16,17 @@ type Props = {
 }
 
 export default function ReceiptForm(
-    {categories, tags, receiptFormAction} : Props    
+    {receipt, categories, tags, receiptFormAction} : Props    
 ) {
-    const [isoDate, setIsoDate] = useState((new Date()).toISOString().slice(0,10));
+    const [isoDate, setIsoDate] = useState(
+        receipt?.date
+            ? (new Date(receipt.date)).toISOString().slice(0,10)
+            : (new Date()).toISOString().slice(0,10)
+    );
     const handleIsoDateChange = (event: React.ChangeEvent) => {
         setIsoDate(event.target.value);
     }
-    const [total, setTotal] = useState("0");
+    const [total, setTotal] = useState(receipt?.total ?? "0");
     const handleTotalChange = (event: React.ChangeEvent) => {
         let numberOnly = event.target.value.replace(/[^0-9.]/g, '');
         const numberParts = numberOnly.split(".");
@@ -34,11 +38,11 @@ export default function ReceiptForm(
         }
         setTotal(Number(numberOnly).toLocaleString());
     }
-    const [categoryId, setCategoryId] = useState(categories[0].id);
+    const [categoryId, setCategoryId] = useState(receipt?.categoryId ?? categories[0].id);
     const handleCategoryChange = (event: React.ChangeEvent) => {
         setCategoryId(Number(event.target.value));
     }
-    const [tagId, setTagId] = useState(tags[0].id);
+    const [tagId, setTagId] = useState(receipt?.tagId ?? tags[0].id);
     const handleTagChange = (event: React.ChangeEvent) => {
         setTagId(Number(event.target.value));
     }
@@ -55,6 +59,8 @@ export default function ReceiptForm(
 
         if (receiptFormAction === ReceiptFormAction.Create) {
             await createReceipt(receiptCreation);
+        } else {
+            console.log(receiptCreation);
         }
 
     }
