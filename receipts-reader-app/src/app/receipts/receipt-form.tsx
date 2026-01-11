@@ -6,15 +6,16 @@ import Button from "react-bootstrap/Button";
 import {useState} from "react";
 import type React from "react";
 
-export enum ReceiptFormType {
-    Create: "create";
-    Edit: "edit";
-    View: "view";
+export const enum ReceiptFormType {
+    Create = "create",
+    Edit = "edit",
+    View = "view",
 }
 
 type Props = {
-    categories: string[],
-    tags: string[],
+    receipt?: ReceiptDto,
+    categories: CategoryDto[],
+    tags: TagDto[],
     type: ReceiptFormType
 }
 
@@ -37,24 +38,23 @@ export default function ReceiptForm(
         }
         setTotal(Number(numberOnly).toLocaleString());
     }
-    const [category, setCategory] = useState(categories[0]);
+    const [categoryId, setCategoryId] = useState(categories[0].id);
     const handleCategoryChange = (event: React.ChangeEvent) => {
-        setCategory(event.target.value);
+        setCategoryId(Number(event.target.value));
     }
-    const [tag, setTag] = useState(tags[0]);
+    const [tagId, setTagId] = useState(tags[0].id);
     const handleTagChange = (event: React.ChangeEvent) => {
-        setTag(event.target.value);
+        setTagId(Number(event.target.value));
     }
 
     const handleFormSubmit = async () => {
+        let numberOnly = total.replace(/[^0-9.]/g, '');
         const body =  JSON.stringify({
             imageId: null,
             date: (new Date(isoDate)).getTime(),
-            total: Number(total),
-            categoryId: 16,
-            tagId: 1,
-            // category,
-            // tag,
+            total: Number(numberOnly),
+            categoryId,
+            tagId,
         });
         
         await fetch(customReceiptPostUrl, {
@@ -88,15 +88,15 @@ export default function ReceiptForm(
       <Form.Group className="mb-3" controlId="category">
         <Form.Label>Category</Form.Label>
         <Form.Select 
-            value={category}
+            value={categoryId}
             onChange={handleCategoryChange}
         >
-            {categories.map(categoryVal => { return (
+            {categories.map(category=> { return (
                 <option 
-                    key={categoryVal}
-                    value={categoryVal}
+                    key={category.id}
+                    value={category.id}
                 >
-                    {categoryVal}
+                    {category.name}
                 </option>
             )})}
         </Form.Select>
@@ -108,15 +108,15 @@ export default function ReceiptForm(
       <Form.Group className="mb-3" controlId="tag">
         <Form.Label>Tag</Form.Label>
         <Form.Select 
-            value={tag}
+            value={tagId}
             onChange={handleTagChange}
         >
-            {tags.map(tagVal => { return (
+            {tags.map(tag => { return (
                 <option 
-                    key={tagVal}
-                    value={tagVal}
+                    key={tag.id}
+                    value={tag.id}
                 >
-                    {tagVal}
+                    {tag.name}
                 </option>
             )})}
         </Form.Select>

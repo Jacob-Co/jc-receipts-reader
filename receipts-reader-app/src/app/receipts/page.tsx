@@ -1,21 +1,16 @@
-import CustomReceiptForm from "./custom-receipt-form";
+import {fetchAllCategories, fetchAllTags} from "../backend-calls";
+import ReceiptForm, { ReceiptFormType } from "./receipt-form";
 
-export default function CustomReceiptsContainer() {
-    const categories = [
-        "Shopping",
-        "Food",
-        "Transportation",
-        "Activity",
-        "Utilities"
-    ];
-
-    const tags = ["Vietnam 2025"];
+export default async function CustomReceiptsContainer() {
+    const categories = await fetchAllCategories();
+    const tags = await fetchAllTags();
 
   return (
     <div>
-        <CustomReceiptForm 
+        <ReceiptForm 
             categories={categories} 
             tags={tags}
+            type={ReceiptFormType.Create}
         />
     </div>
   );
