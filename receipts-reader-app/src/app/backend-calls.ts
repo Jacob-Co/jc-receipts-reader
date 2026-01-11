@@ -1,5 +1,5 @@
-import { receiptUrl, categoryUrl, tagUrl } from "./backend-constants";
-import { ReceiptDto, CategoryDto, TagDto } from "./backend-types.ts"
+import { receiptUrl, categoryUrl, tagUrl, customReceiptPostUrl } from "./backend-constants";
+import { ReceiptDto, CreateReceiptDto, CategoryDto, TagDto } from "./backend-types.ts"
 
 export async function fetchReceipt(id: number): Promise<ReceiptDto> {
     const receiptRes = await fetch(receiptUrl + `/${id}`);
@@ -14,4 +14,14 @@ export async function fetchAllCategories(): Promise<CategoryDto[]> {
 export async function fetchAllTags(): Promise<TagDto[]> {
     const tagsRes = await fetch(tagUrl + "/all");
     return await tagsRes.json();
+}
+
+export async function createReceipt(receipt: CreateReceiptDto) {
+    await fetch(customReceiptPostUrl, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(receipt)
+    })
 }

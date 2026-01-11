@@ -7,6 +7,8 @@ export type ReceiptDto = {
     tagId: number,
 };
 
+export type CreateReceiptDto = Omit<ReceiptDto, "id">;
+
 export type TagDto = {
     id: number,
     name: string,

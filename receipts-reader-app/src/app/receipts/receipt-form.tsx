@@ -1,26 +1,22 @@
 'use client'
 import {customReceiptPostUrl} from "../backend-constants";
 import {TagDto, ReceiptDto, CategoryDto} from "../backend-types";
+import { createReceipt } from "../backend-calls";
+import { ReceiptFormAction } from "./constants"
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import {useState} from "react";
 import type React from "react";
 
-export const enum ReceiptFormType {
-    Create = "create",
-    Edit = "edit",
-    View = "view",
-}
-
 type Props = {
     receipt?: ReceiptDto,
     categories: CategoryDto[],
     tags: TagDto[],
-    type: ReceiptFormType
+    receiptFormAction: ReceiptFormAction 
 }
 
 export default function ReceiptForm(
-    {categories, tags, type} : Props    
+    {categories, tags, receiptFormAction} : Props    
 ) {
     const [isoDate, setIsoDate] = useState((new Date()).toISOString().slice(0,10));
     const handleIsoDateChange = (event: React.ChangeEvent) => {
@@ -49,21 +45,18 @@ export default function ReceiptForm(
 
     const handleFormSubmit = async () => {
         let numberOnly = total.replace(/[^0-9.]/g, '');
-        const body =  JSON.stringify({
+        const receiptCreation =  ({
             imageId: null,
             date: (new Date(isoDate)).getTime(),
             total: Number(numberOnly),
             categoryId,
             tagId,
         });
-        
-        await fetch(customReceiptPostUrl, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body
-        })
+
+        if (receiptFormAction === ReceiptFormAction.Create) {
+            await createReceipt(receiptCreation);
+        }
+
     }
 
   return (
@@ -129,7 +122,9 @@ export default function ReceiptForm(
         onClick={handleFormSubmit} 
         variant="primary" 
       >
-        Submit
+          {
+              receiptFormAction
+          }
       </Button>
     </Form>
   );
