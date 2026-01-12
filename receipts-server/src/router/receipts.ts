@@ -1,4 +1,5 @@
 import { saveReceipt, getReceipt } from "../model/receipts";
+import { CreateReceiptValidator } from "../validator";
 import {randomUUID} from "crypto";
 import path from "path";
 import fs from "fs";
@@ -31,7 +32,8 @@ router.post("/upload", upload.single("receipt"), (req: Request, res: Response) =
 });
 
 router.post("/custom", async (req: Request, res: Response) => {
-    const createdReceipt = await saveReceipt(req.body);
+    const receiptInput = CreateReceiptValidator.parse(req.body);
+    const createdReceipt = await saveReceipt(receiptInput);
     res.json(createdReceipt);
 });
 
