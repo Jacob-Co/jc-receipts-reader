@@ -1,12 +1,12 @@
 'use client'
-import {customReceiptPostUrl} from "../backend-constants";
 import {TagDto, ReceiptDto, CategoryDto} from "../backend-types";
 import { createReceipt } from "../backend-calls";
 import { ReceiptFormAction } from "./constants"
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import {useState} from "react";
-import type React from "react";
+import React from "react";
+import { useRouter } from "next/navigation";
 
 type Props = {
     receipt?: ReceiptDto,
@@ -23,11 +23,11 @@ export default function ReceiptForm(
             ? (new Date(receipt.date)).toISOString().slice(0,10)
             : (new Date()).toISOString().slice(0,10)
     );
-    const handleIsoDateChange = (event: React.ChangeEvent) => {
+    const handleIsoDateChange = (event: React.ChangeEvent<HTMLDataElement>) => {
         setIsoDate(event.target.value);
     }
-    const [total, setTotal] = useState(receipt?.total ?? "0");
-    const handleTotalChange = (event: React.ChangeEvent) => {
+    const [total, setTotal] = useState(receipt?.total.toLocaleString() ?? "0");
+    const handleTotalChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         let numberOnly = event.target.value.replace(/[^0-9.]/g, '');
         const numberParts = numberOnly.split(".");
         if (numberParts.length > 2) {
@@ -39,14 +39,15 @@ export default function ReceiptForm(
         setTotal(Number(numberOnly).toLocaleString());
     }
     const [categoryId, setCategoryId] = useState(receipt?.categoryId ?? categories[0].id);
-    const handleCategoryChange = (event: React.ChangeEvent) => {
+    const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setCategoryId(Number(event.target.value));
     }
     const [tagId, setTagId] = useState(receipt?.tagId ?? tags[0].id);
-    const handleTagChange = (event: React.ChangeEvent) => {
+    const handleTagChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setTagId(Number(event.target.value));
     }
 
+    const router = useRouter();
     const handleFormSubmit = async () => {
         let numberOnly = total.replace(/[^0-9.]/g, '');
         const receiptCreation =  ({
@@ -58,7 +59,9 @@ export default function ReceiptForm(
         });
 
         if (receiptFormAction === ReceiptFormAction.Create) {
-            await createReceipt(receiptCreation);
+            const res = await createReceipt(receiptCreation);
+            const body = await res.json();
+            router.push(`/receipts/${body.id}`);
         } else {
             console.log(receiptCreation);
         }
