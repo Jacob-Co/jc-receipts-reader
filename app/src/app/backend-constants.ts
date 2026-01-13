@@ -1,4 +1,4 @@
-const backendUrl = process.env.BACKEND_URL || "http://localhost:3001";
+export const backendUrl = process.env.BACKEND_URL || "http://localhost:3001";
 
 export const receiptUrl = backendUrl + "/receipts";
 export const receiptUploadUrl = backendUrl + "/receipts/upload";
