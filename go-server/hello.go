@@ -1,9 +1,5 @@
 package main
 
-import (
-	"fmt"
-)
-
 func Hello(name string) string {
 	if name == "" {
 		return "Hello World"
@@ -12,6 +8,6 @@ func Hello(name string) string {
 	return "Hello, " + name
 }
 
-func main() {
-	fmt.Print(Hello("Jacob"))
-}
+// func main() {
+// 	fmt.Print(Hello("Jacob"))
+// }
