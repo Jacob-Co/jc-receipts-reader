@@ -6,15 +6,29 @@ import (
 
 func TestHello(t *testing.T) {
 	t.Run("Should greet name if present", func(t *testing.T) {
-		got := Hello("Chris")
+		got := Hello("Chris", "")
 		want := "Hello, Chris"
 
 		assertCorrectMessage(t, got, want)
 	})
 
 	t.Run("Should greet Hello World if empty string", func(t *testing.T) {
-		got := Hello("")
+		got := Hello("", "")
 		want := "Hello World"
+
+		assertCorrectMessage(t, got, want)
+	})
+
+	t.Run("Should use Hola if Spanish", func(t *testing.T) {
+		got := Hello("Ernie", "Spanish")
+		want := "Hola, Ernie"
+
+		assertCorrectMessage(t, got, want)
+	})
+
+	t.Run("Should use Bonjour if French", func(t *testing.T) {
+		got := Hello("Ernie", "French")
+		want := "Bonjour, Ernie"
 
 		assertCorrectMessage(t, got, want)
 	})
