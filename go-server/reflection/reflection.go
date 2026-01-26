@@ -3,32 +3,34 @@ package reflection
 import "reflect"
 
 func Walk(anyStruct interface{}, walkFn func(string)) {
-	val := getValue(anyStruct)
-
-	if val.Kind() == reflect.Slice {
-		for i := 0; i < val.Len(); i++ {
-			Walk(val.Index(i).Interface(), walkFn)
-		}
-		return
-	}
-
-	for i := 0; i < val.NumField(); i++ {
-		field := val.Field(i)
-		switch field.Kind() {
-		case reflect.String:
-			walkFn(field.String())
-		case reflect.Struct:
-			Walk(field.Interface(), walkFn)
-		}
-	}
-}
-
-func getValue(anyStruct interface{}) reflect.Value {
 	val := reflect.ValueOf(anyStruct)
 
-	if val.Kind() == reflect.Pointer {
-		val = val.Elem()
+	walkValue := func(val reflect.Value) {
+		Walk(val.Interface(), walkFn)
 	}
 
-	return val
+	switch val.Kind() {
+	case reflect.Pointer:
+		walkValue(val.Elem())
+	case reflect.Slice, reflect.Array:
+		for i := 0; i < val.Len(); i++ {
+			walkValue(val.Index(i))
+		}
+	case reflect.Struct:
+		for i := 0; i < val.NumField(); i++ {
+			walkValue(val.Field(i))
+		}
+	case reflect.String:
+		walkFn(val.String())
+	case reflect.Map:
+		for _, key := range val.MapKeys() {
+			walkValue(val.MapIndex(key))
+		}
+	case reflect.Chan:
+		chanVal, isOpen := val.Recv()
+		if isOpen {
+			walkValue(chanVal)
+			walkValue(val)
+		}
+	}
 }
