@@ -136,6 +136,23 @@ func TestWalk(t *testing.T) {
 			t.Errorf("got %v, want %v", walkFnCalls, want)
 		}
 	})
+
+	t.Run("Should for work for functions", func(t *testing.T) {
+		aFunction := func() (Profile, Profile) {
+			return Profile{"Berlin", 33}, Profile{"Katowice", 44}
+		}
+
+		var got []string
+		want := []string{"Berlin", "Katowice"}
+
+		Walk(aFunction, func(input string) {
+			got = append(got, input)
+		})
+
+		if !slices.Equal(got, want) {
+			t.Errorf("got %v, want %v", got, want)
+		}
+	})
 }
 
 func assertContains(t *testing.T, strSlice []string, strCheck string) {
