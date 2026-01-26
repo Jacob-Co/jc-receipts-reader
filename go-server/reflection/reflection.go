@@ -32,5 +32,10 @@ func Walk(anyStruct interface{}, walkFn func(string)) {
 			walkValue(chanVal)
 			walkValue(val)
 		}
+	case reflect.Func:
+		retVals := val.Call([]reflect.Value{})
+		for _, retVal := range retVals {
+			walkValue(retVal)
+		}
 	}
 }
