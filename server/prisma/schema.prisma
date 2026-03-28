@@ -38,3 +38,12 @@ model Tag {
   name     String    @unique
   receipts Receipt[]
 }
+
+model Link {
+  id        Int    @id @default(autoincrement())
+  url       String
+  code      String @unique
+  shortUrl  String @unique
+  clicks    Int
+  createdAt BigInt
+}

@@ -1,0 +1,1 @@
+valid url just has http or https followed by ://
